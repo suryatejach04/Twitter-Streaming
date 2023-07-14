@@ -39,15 +39,14 @@ public class TwitterProducer {
 
         Properties properties = new Properties();
 
-//        //connect to conduktor platform
+        // connect to local host
+        properties.setProperty("bootstrap.servers", ""127.0.0.1:9092"");
+
+        //connect to conduktor platform
         properties.setProperty("bootstrap.servers", "cluster.playground.cdkt.io:9092");
         properties.setProperty("security.protocol", "SASL_SSL");
         properties.setProperty("sasl.jaas.config", "org.apache.kafka.common.security.plain.PlainLoginModule required username='6C2s5A1LdCkyLNGH4sFaV7' password='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2F1dGguY29uZHVrdG9yLmlvIiwic291cmNlQXBwbGljYXRpb24iOiJhZG1pbiIsInVzZXJNYWlsIjpudWxsLCJwYXlsb2FkIjp7InZhbGlkRm9yVXNlcm5hbWUiOiI2QzJzNUExTGRDa3lMTkdINHNGYVY3Iiwib3JnYW5pemF0aW9uSWQiOjc0NjQ1LCJ1c2VySWQiOjg2ODUzLCJmb3JFeHBpcmF0aW9uQ2hlY2siOiJmNjBmYzE3Ni0xNDRlLTQzYzgtYTk2MC02ZDYyNWE2NzhhNjAifX0.sG3ujeEaFXnOM-NXSk0LaZYEaFGHYmo6QCC3f1uljlg';");
         properties.setProperty("sasl.mechanism", "PLAIN");
-
-//        security.protocol=SASL_SSL
-//        sasl.mechanism=PLAIN
-        //      sasl.jaas.config=org.apache.kafka.common.security.plain.PlainLoginModule required username='6C2s5A1LdCkyLNGH4sFaV7' password='eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2F1dGguY29uZHVrdG9yLmlvIiwic291cmNlQXBwbGljYXRpb24iOiJhZG1pbiIsInVzZXJNYWlsIjpudWxsLCJwYXlsb2FkIjp7InZhbGlkRm9yVXNlcm5hbWUiOiI2QzJzNUExTGRDa3lMTkdINHNGYVY3Iiwib3JnYW5pemF0aW9uSWQiOjc0NjQ1LCJ1c2VySWQiOjg2ODUzLCJmb3JFeHBpcmF0aW9uQ2hlY2siOiJmNjBmYzE3Ni0xNDRlLTQzYzgtYTk2MC02ZDYyNWE2NzhhNjAifX0.sG3ujeEaFXnOM-NXSk0LaZYEaFGHYmo6QCC3f1uljlg';
 
 
         //set producer properties
@@ -77,7 +76,8 @@ public class TwitterProducer {
         }
         if (msg != null) {
             logger.info(msg);
-            // send messages to kafka through records
+            // create topic before sending data into it 
+            // send messages to kafka through records 
             producer.send(new ProducerRecord<>("kafka-twitter", null, msg), new Callback() {
                 @Override
                 public void onCompletion(RecordMetadata metadata, Exception e) {
