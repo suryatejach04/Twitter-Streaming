@@ -40,7 +40,7 @@ public class TwitterProducer {
         Properties properties = new Properties();
 
         // connect to local host
-        properties.setProperty("bootstrap.servers", ""127.0.0.1:9092"");
+        properties.setProperty("bootstrap.servers", "127.0.0.1:9092");
 
         //connect to conduktor platform
         properties.setProperty("bootstrap.servers", "cluster.playground.cdkt.io:9092");
