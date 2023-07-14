@@ -91,22 +91,43 @@ public class TwitterProducer {
     }
 
     // create twitter client
-    private Client createTwitterClient(BlockingQueue<String> allmsgs) {
+    // private Client createTwitterClient(BlockingQueue<String> allmsgs) {
 
-        Hosts twitterHosts = new HttpHosts(Constants.STREAM_HOST);
-        StatusesFilterEndpoint twitterEndpoint = new StatusesFilterEndpoint();
-        // words to be found out
-        twitterEndpoint.trackTerms(Collections.singletonList(trackTerms.toString()));
-       // authentication to Twitter api
-        // create another class-TwitterConfig to store your keys and access keys from there
-        Authentication twitterAuth = new OAuth1(TwitterConfig.CONSUMER_KEYS, TwitterConfig.CONSUMER_SECRETS, TwitterConfig.TOKEN, TwitterConfig.SECRET);
+    //     Hosts twitterHosts = new HttpHosts(Constants.STREAM_HOST);
+    //     StatusesFilterEndpoint twitterEndpoint = new StatusesFilterEndpoint();
+    //     // words to be found out
+    //     twitterEndpoint.trackTerms(Collections.singletonList(trackTerms.toString()));
+    //    // authentication to Twitter api
+    //     // create another class-TwitterConfig to store your keys and access keys from there
+    //     Authentication twitterAuth = new OAuth1(TwitterConfig.CONSUMER_KEYS, TwitterConfig.CONSUMER_SECRETS, TwitterConfig.TOKEN, TwitterConfig.SECRET);
+    //     ClientBuilder builder = new ClientBuilder()
+    //             .name("twitter-client")
+    //             .hosts(Constants.STREAM_HOST)
+    //             .authentication(twitterAuth)
+    //             .endpoint(twitterEndpoint)
+    //             .processor(new StringDelimitedProcessor(allmsgs));
+    //     Client twitterclient = builder.build();
+    //     return twitterclient;
+    // }
+    public Client createTwitterClient(BlockingQueue<String> msgQueue){
+        /** Setting up a connection   */
+        Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
+        StatusesFilterEndpoint hbEndpoint = new StatusesFilterEndpoint();
+        // Term that I want to search on Twitter
+        hbEndpoint.trackTerms(trackTerms);
+        // Twitter API and tokens
+        Authentication hosebirdAuth = new OAuth1(TwitterConfig.CONSUMER_KEYS, TwitterConfig.CONSUMER_SECRETS, TwitterConfig.TOKEN, TwitterConfig.SECRET);
+
+        /** Creating a client   */
         ClientBuilder builder = new ClientBuilder()
-                .name("twitter-client")
-                .hosts(Constants.STREAM_HOST)
-                .authentication(twitterAuth)
-                .endpoint(twitterEndpoint)
-                .processor(new StringDelimitedProcessor(allmsgs));
-        Client twitterclient = builder.build();
-        return twitterclient;
+                .name("Hosebird-Client")
+                .hosts(hosebirdHosts)
+                .authentication(hosebirdAuth)
+                .endpoint(hbEndpoint)
+                .processor(new StringDelimitedProcessor(msgQueue));
+
+        Client hbClient = builder.build();
+        return hbClient;
     }
+
 }
